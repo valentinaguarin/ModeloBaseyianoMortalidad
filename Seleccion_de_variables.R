@@ -81,6 +81,8 @@ mortal_covid$severidad_grupos %<>% as.factor
 str(mortal_covid$severidad_grupos)
 
 
+#----- corrección de variables binarias -----#
+
 #-----crear variable de Glucose_range ---#
 
 Glucose_range <-c()
@@ -181,7 +183,7 @@ colnames(mortal_covid)
 #---- quitar la variable age..5 ---- #
 
 mortal_covid <-mortal_covid[,-5]
-view(mortal_covid)
+#view(mortal_covid)
 
 
 
@@ -211,6 +213,32 @@ modelo_binarias <- glm(Death ~ `Derivation cohort`+ LOS_Y + Black + White + Asia
 summary(modelo_binarias)
 
 
+#---- agregar Na en las variables que tienen problema en el rango ---#
+
+
+#--- NA'S---#
+
+#---Temp
+
+mortal_covid$Temp[mortal_covid$Temp < 33.0] <- NA
+mortal_covid$Temp[mortal_covid$Temp > 43.0] <- NA
+
+class(mortal_covid$Temp)
+
+
+
+#---OsSats
+
+mortal_covid$OsSats[mortal_covid$OsSats < 60] <- NA
+
+#view(mortal_covid)
+
+#queda con 217 NAS
+
+summary(mortal_covid)
+
+view(mortal_covid)
+
 #---- Selección de todas las variables ---#
 library(MASS) 
 
@@ -234,23 +262,14 @@ summary(modelo1)
 
 #AIC: 3614
 
-modelo2 <-glm(Death ~  LOS + PVD  + Age...27+
-                `O2 Sat < 94`+ Temp + MAP + `MAP < 70`+
-                Plts + BUN + CrtnScore + `AST > 40` + `IL6 > 150` +
-                CrctProtein+Procalcitonin   + Troponin +
-                Ferritin_range + Glucose_range + severidad_grupos, data=mortal_covid, family =  binomial(link = "logit"))
 
-summary(modelo2)
+#---variables significativas  combinadas numericas y binarias---#
 
-#AIC: 3743.3
-
-#---variables significativas ---#
-
-modelo3 <-glm(Death ~ LOS_Y + Stroke + Age...27+ AgeScore+ MAP+ `MAP < 70`+ Plts + BUNYes + BUN + CrtnYes +
+modelo2 <-glm(Death ~ LOS_Y + Stroke + Age...27+ AgeScore+ MAP+ `MAP < 70`+ Plts + BUNYes + BUN + CrtnYes +
                 `AST > 40` + `IL6 > 150` + `Ferritin > 300` + Procalcitonin + `Procalciton > 0.1` + Troponin
               ,data=mortal_covid1, family =  binomial(link = "logit"))
 
-summary(modelo3)
+summary(modelo2)
 
 #AIC: 3634
 
