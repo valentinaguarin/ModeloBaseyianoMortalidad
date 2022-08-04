@@ -186,33 +186,6 @@ mortal_covid <-mortal_covid[,-5]
 #view(mortal_covid)
 
 
-
-#------ selección variables numéricas -----#
-
-modelo_numericas <- glm(Death ~ LOS + Age...27 + MAP + Ddimer + Plts + INR + Troponin + Glucose + BUN + Creatinine + Sodium + Ferritin + Plts +
-                          Lympho + AST + ALT + WBC + Lympho + IL6 + CrctProtein + Procalcitonin + Troponin, data = mortal_covid, family = 
-                          binomial(link = "logit"))
-
-summary(modelo_numericas)
-
-
-#----- Selección de variables binarias---#
-
-
-modelo_binarias <- glm(Death ~ `Derivation cohort`+ LOS_Y + Black + White + Asian + Latino + MI + PVD + CHF + CVD +
-                         DEMENT + COPD + `DM Complicated` + `DM Simple` + `Renal Disease` + `All CNS` + `Pure CNS` +
-                         Stroke + Seizure + OldSyncope + OldOtherNeuro + OtherBrnLsn + O2SatsYes + TempYes + MapYes+
-                         DDimerYes + PltsYes + PltsScore + CrtnScore + INRYes + TempYes + BUNYes + CrtnYes + SodimuYes +
-                         GlucoseYese + ASTYes + ALTYes + WBCYes + LymphoYes + IL6Yes + FerritinYes + CrctProtYes + 
-                         ProCalCYes + TropYes + `INR > 1.2` + `MAP < 70` + `O2 Sat < 94` + `Temp > 38` + `D-Dimer > 3` +
-                         `Troponin > 0.1` + `BUN > 30` + `Sodium < 139 or > 154` + `Glucose <60 or > 500` + `Ferritin > 300`+
-                         `AST > 40` + `ALT > 40` + `WBC <1.8 or > 4.8` + `IL6 > 150` + `C-Reactive Prot > 10` + `Procalciton > 0.1`+
-                         `Lymphocytes < 1` + `Troponin > 0.1`+ severidad_grupos, data = mortal_covid, family = 
-                         binomial(link = "logit"))
-
-summary(modelo_binarias)
-
-
 #---- agregar Na en las variables que tienen problema en el rango ---#
 
 
@@ -249,29 +222,35 @@ modboth <- stepAIC(full.model, trace=FALSE, direction="both")
 summary(modboth)
 
 
-#---- probar modelo con todas las variables significativas ----#
 
-modelo1 <-glm(Death ~ LOS_Y + LOS + PVD + COPD+
-                Stroke + Seizure + OldSyncope + Age...27+
-                OsSats + `O2 Sat < 94`+ Temp + MAP + `MAP < 70`+
-                Plts + BUN + CrtnScore + `AST > 40` + `IL6 > 150` +
-                CrctProtein+Procalcitonin   + Troponin +
-                Ferritin_range + Glucose_range + severidad_grupos, data=mortal_covid, family =  binomial(link = "logit"))
+#-- aplicar filtro a OsSats---#
+mortal_covid<- mortal_covid %>% filter(OsSats>60)
+
+#---variables significativas de todas con los Na---#
+
+
+modelo1 <-glm(Death ~ LOS_Y + Stroke + OldSyncope+Age...27+ OsSats+Temp+ MAP+ DDimerYes+
+                Plts  +BUN+ CrtnYes + Creatinine + CrtnScore +AST + `IL6 > 150`+
+                `Ferritin > 300`+ CrctProtein+ Procalcitonin + Troponin+  
+                Ferritin_range + Glucose_range + severidad_grupos ,
+                data=mortal_covid, family =  binomial(link = "logit"))
 
 summary(modelo1)
 
-#AIC: 3614
+#AIC: 3440.2
 
 
-#---variables significativas  combinadas numericas y binarias---#
+#--- modelo 3 sacando las que no son signficiativas ---#
 
-modelo2 <-glm(Death ~ LOS_Y + Stroke + Age...27+ AgeScore+ MAP+ `MAP < 70`+ Plts + BUNYes + BUN + CrtnYes +
-                `AST > 40` + `IL6 > 150` + `Ferritin > 300` + Procalcitonin + `Procalciton > 0.1` + Troponin
-              ,data=mortal_covid1, family =  binomial(link = "logit"))
+modelo2 <-glm(Death ~ LOS_Y + Stroke +Age...27+ OsSats+ MAP+ DDimerYes+
+                Plts  +BUN + Creatinine + CrtnScore +AST + `IL6 > 150`+
+                `Ferritin > 300`+ CrctProtein+ Procalcitonin + Troponin+  
+                Ferritin_range + Glucose_range + severidad_grupos ,
+              data=mortal_covid, family =  binomial(link = "logit"))
 
 summary(modelo2)
 
-#AIC: 3634
+#AIC: 3466.6
 
 
 
