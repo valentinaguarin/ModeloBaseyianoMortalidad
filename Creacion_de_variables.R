@@ -164,3 +164,35 @@ mortal_covid$Ferritin_range %<>% as.factor
 #---- verificar que este bien --#
 str(mortal_covid$Ferritin_range)
 
+
+
+#--- COCIENTE FALLECIDOS VS NO FALLECIDOSS POR NIVEL ----#
+
+#----- severidad grupo 1 ----#
+fallecidos1= sum(mortal_covid$severidad_grupos=="1" & mortal_covid$Death=="1")
+no_fallecidos1= sum(mortal_covid$severidad_grupos=="1" & mortal_covid$Death=="0")
+
+
+cociente_grupo1<- fallecidos1/no_fallecidos1
+cociente_grupo1
+
+
+#----- severidad grupo 2 ----#
+fallecidos2= sum(mortal_covid$severidad_grupos=="2" & mortal_covid$Death=="1")
+no_fallecidos2= sum(mortal_covid$severidad_grupos=="2" & mortal_covid$Death=="0")
+
+
+cociente_grupo2<- fallecidos2/no_fallecidos2
+cociente_grupo2
+
+#----- severidad grupo 3 ----#
+fallecidos3= sum(mortal_covid$severidad_grupos=="3" & mortal_covid$Death=="1")
+no_fallecidos3= sum(mortal_covid$severidad_grupos=="3" & mortal_covid$Death=="0")
+
+
+cociente_grupo3<- fallecidos3/no_fallecidos3
+cociente_grupo3
+
+
+
+
