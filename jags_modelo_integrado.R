@@ -10,6 +10,20 @@ mortal_covid <- read_excel(direccion)
 dim(mortal_covid)
 
 
+#-filtros ---#
+mortal_covid<- mortal_covid %>% filter(MAP>0)
+mortal_covid<- mortal_covid %>% filter(Plts>0)
+mortal_covid<- mortal_covid %>% filter(OsSats>0)
+#mortal_covid<- mortal_covid %>% filter(Sodium>0)
+#mortal_covid<- mortal_covid %>% filter(Lympho>0)
+mortal_covid<- mortal_covid %>% filter(CrctProtein>0)
+mortal_covid<- mortal_covid %>% filter(Procalcitonin>0)
+#mortal_covid<- mortal_covid %>% filter(WBC>0)
+mortal_covid<- mortal_covid %>% filter(LOS>0)
+dim(mortal_covid)
+
+
+
 mortal_covid<- mortal_covid %>% filter(OsSats>60)
 dim(mortal_covid)
 
@@ -17,7 +31,7 @@ dim(mortal_covid)
 
 colnames(mortal_covid)
 mortal_covid <- mortal_covid[,-5]
-
+view(mortal_covid)
 
 
 
@@ -33,6 +47,11 @@ for (i in 1:length(mortal_covid$Severity)) {  #funcion para asignar valores a ne
 }
 
 mortal_covid<-cbind(mortal_covid,severidad_grupos)
+
+
+x12 = as.factor(mortal_covid$severidad_grupos)
+class(x12)
+
 
 
 #-----crear variable de Glucose_range ---#
@@ -201,14 +220,12 @@ x8 = (Procalcitonin - mean(Procalcitonin))/sd(Procalcitonin)
 x9 = Ferritin_range
 x10 = Glucose_range
 x11 = DDimerYes
-x12 = `BUN > 30`
-x13 = `IL6 > 150`
-x14 = severidad_grupos
+x12 = severidad_grupos
 
 
 
 
-X = model.matrix(~ x1+x2+x3+x4+x5+x6+x7+x8+x9+x10+x11+x12+x13+x14)
+X = model.matrix(~ x1+x2+x3+x4+x5+x6+x7+x8+x9+x10+x11+x12)
 
 head(X)
 dim(X)
@@ -240,7 +257,7 @@ bayes.mod.params <- c("b")
 
 #Puntos iniciales de la cadena MCMC
 bayes.mod.inits <- function(){
-  list("b" = rnorm(15))  #cantidad de variables 
+  list("b" = rnorm(13))  #cantidad de variables 
 }
 
 
@@ -251,7 +268,9 @@ bayes.mod.fit <- jags(data = data.input.jags, inits = bayes.mod.inits,
 
 print(bayes.mod.fit)
 
-##### DIC: 3792.6
+##### DIC 2117.9
+
+
 
 
 
