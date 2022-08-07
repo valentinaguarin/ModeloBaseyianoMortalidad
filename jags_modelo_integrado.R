@@ -217,15 +217,16 @@ x5 = (MAP - mean(MAP))/sd(MAP)
 x6 = (Plts - mean(Plts))/sd(Plts)
 x7 = (CrctProtein - mean(CrctProtein))/sd(CrctProtein)
 x8 = (Procalcitonin - mean(Procalcitonin))/sd(Procalcitonin)
-x9 = Ferritin_range
-x10 = Glucose_range
-x11 = DDimerYes
-x12 = severidad_grupos
+x9 = (Troponin-mean(Troponin))/sd(Troponin)
+x10 = Ferritin_range
+x11 = Glucose_range
+x12 = DDimerYes
+x13 = severidad_grupos
 
 
 
 
-X = model.matrix(~ x1+x2+x3+x4+x5+x6+x7+x8+x9+x10+x11+x12)
+X = model.matrix(~ x1+x2+x3+x4+x5+x6+x7+x8+x9+x10+x11+x12+x13)
 
 head(X)
 dim(X)
@@ -257,7 +258,7 @@ bayes.mod.params <- c("b")
 
 #Puntos iniciales de la cadena MCMC
 bayes.mod.inits <- function(){
-  list("b" = rnorm(13))  #cantidad de variables 
+  list("b" = rnorm(14))  #cantidad de variables 
 }
 
 
