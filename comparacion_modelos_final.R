@@ -342,15 +342,15 @@ print(bayes.mod.fit2)
 #DIC: 2534.5
 
 #modelo 1
-X1 = model.matrix(~ x1+x3+x4+x7+x8+x13 )
+X1 = model.matrix(~ x1+x2+x3+x4+x5+x6+x7+x8+x9+x10+x11+x12+x13 )
 #modelos 2
-X2 = model.matrix(~ x1+x2+x3+x4+x5+x6+x7+x8+x9+x10+x11+x12+x13)
+X2 = model.matrix(~x1+x3+x4+x7+x8+x13 )
 
 #posterior modelo 1
-Beta.simu.poste.M1 = bayes.mod.fit2$BUGSoutput$sims.list$b
+Beta.simu.poste.M1 = bayes.mod.fit$BUGSoutput$sims.list$b
 dim(Beta.simu.poste.M1)
 #posterior modelo 2
-Beta.simu.poste.M2 = bayes.mod.fit$BUGSoutput$sims.list$b
+Beta.simu.poste.M2 = bayes.mod.fit2$BUGSoutput$sims.list$b
 dim(Beta.simu.poste.M2)
 
 
@@ -363,7 +363,11 @@ vero.marginal2
 
 B12 = vero.marginal1/vero.marginal2
 B12
-# Menor a 1, favorable al modelo 2
+
+
+# es m0/m1 entonces h0=modelo 1 y h1=modelo 2S
+# b12 E (3,20) fuerte evidencia a favor del modelo 1
+
 1/B12 # Nivel de favorabilidad al modelo 2.
 # Notar que el deviance dice lo contrario (Seleccionar el de mejor desempeño en todos los modelos)  
 
