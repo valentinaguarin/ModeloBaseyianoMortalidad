@@ -298,7 +298,7 @@ bayes.mod.inits <- function(){
 #ajuste del modelo reducido
 set.seed(123)
 bayes.mod.fit2 <- jags(data = dat.jags2, inits = bayes.mod.inits,
-                       parameters.to.save = bayes.mod.params, n.chains = 3, n.iter = 9000,
+                       parameters.to.save = bayes.mod.params, n.chains = 3, n.iter = 10000,
                        n.burnin = 1000, model.file = modelo1)
 
 print(bayes.mod.fit2) 
